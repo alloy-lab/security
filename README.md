@@ -18,7 +18,7 @@ Security utilities and middleware for modern web applications. This package prov
 - 📊 **Request Logging**: Comprehensive API request and response logging with timing
 - 🔧 **TypeScript Support**: Full TypeScript definitions and type safety
 - 📦 **Framework Agnostic**: Works with any Express-based application
-- 🎯 **Specialized Middleware**: Pre-configured security middleware for different use cases
+- 🎯 **Specialized Middleware**: Pre-configured security middleware for different use cases.
 
 ## Installation
 
