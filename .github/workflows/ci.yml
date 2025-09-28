@@ -12,8 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    runs-on: self-hosted
+  build:
+    runs-on: [self-hosted, linux, arm64, mini-farm]
     if: github.repository == 'alloy-lab/security'
 
     strategy:
@@ -75,8 +75,8 @@ jobs:
           fail_ci_if_error: false
 
   publish:
-    needs: test
-    runs-on: self-hosted
+    needs: build
+    runs-on: [self-hosted, linux, arm64, mini-farm]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push' && github.repository == 'alloy-lab/security'
     environment: npm-publish
 
