@@ -65,6 +65,8 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          os: linux-arm64
+          version: v11.0.2
 
   publish:
     needs: build
