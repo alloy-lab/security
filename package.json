@@ -1,0 +1,88 @@
+{
+  "name": "@alloylab/security",
+  "version": "1.0.0",
+  "description": "Security utilities and middleware for modern web applications",
+  "main": "dist/index.js",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch",
+    "lint": "eslint src --ext .js,.ts",
+    "lint:fix": "eslint src --ext .js,.ts --fix",
+    "commitlint": "commitlint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "prepublishOnly": "npm run test:run && npm run lint && npm run typecheck",
+    "prepare": "lefthook install && npm run build",
+    "publish": "npm publish --access public",
+    "hooks:install": "lefthook install",
+    "hooks:uninstall": "lefthook uninstall",
+    "version": "npm run format && git add -A",
+    "postversion": "git push && git push --tags"
+  },
+  "keywords": [
+    "security",
+    "middleware",
+    "cors",
+    "rate-limiting",
+    "helmet",
+    "validation",
+    "sanitization",
+    "express",
+    "typescript",
+    "authentication",
+    "authorization"
+  ],
+  "author": "Stephen Way <stephen@stephenway.net>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alloy-lab/overland.git",
+    "directory": "packages/security"
+  },
+  "bugs": {
+    "url": "https://github.com/alloy-lab/overland/issues"
+  },
+  "homepage": "https://github.com/alloy-lab/overland/tree/main/packages/security#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "peerDependencies": {
+    "express": ">=4.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express-rate-limit": "^7.4.1",
+    "express-validator": "^7.2.0",
+    "helmet": "^8.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^9.16.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^24.5.2",
+    "@vitest/coverage-v8": "^3.2.4",
+    "eslint": "^9.16.0",
+    "express": "^4.21.1",
+    "lefthook": "^1.13.2",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.16.0",
+    "vitest": "^3.2.4"
+  }
+}
