@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@alloylab/security Documentation</title>
+    <style>
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+      }
+      .container {
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #2c3e50;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 10px;
+      }
+      h2 {
+        color: #34495e;
+        margin-top: 30px;
+      }
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .feature-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 6px;
+        border-left: 4px solid #3498db;
+      }
+      .feature-card h3 {
+        margin-top: 0;
+        color: #2c3e50;
+      }
+      code {
+        background: #f1f2f6;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: 'Monaco', 'Menlo', monospace;
+      }
+      pre {
+        background: #2c3e50;
+        color: #ecf0f1;
+        padding: 20px;
+        border-radius: 6px;
+        overflow-x: auto;
+      }
+      .badge {
+        display: inline-block;
+        background: #3498db;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8em;
+        margin-right: 8px;
+      }
+      .warning {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        color: #856404;
+        padding: 15px;
+        border-radius: 6px;
+        margin: 20px 0;
+      }
+      .info {
+        background: #d1ecf1;
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+        padding: 15px;
+        border-radius: 6px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🛡️ @alloylab/security</h1>
+      <p>
+        Comprehensive security utilities and middleware for modern web
+        applications.
+      </p>
+
+      <div class="info">
+        <strong>📦 Package:</strong> @alloylab/security<br />
+        <strong>📋 Version:</strong> 1.0.0<br />
+        <strong>🔗 Repository:</strong>
+        <a
+          href="https://github.com/alloy-lab/overland/tree/main/packages/security"
+          >GitHub</a
+        >
+      </div>
+
+      <h2>🚀 Quick Start</h2>
+      <pre><code>import express from 'express';
+import { createApiSecurity } from '@alloylab/security';
+
+const app = express();
+
+// Apply security middleware to all routes
+app.use(createApiSecurity(['https://yourdomain.com']));
+
+app.get('/api/data', (req, res) => {
+  res.json({ message: 'Secure data' });
+});</code></pre>
+
+      <h2>✨ Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>🛡️ CORS Configuration</h3>
+          <p>
+            Flexible CORS setup with origin validation and credential support.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>⏱️ Rate Limiting</h3>
+          <p>
+            Configurable rate limiting for different endpoint types and security
+            levels.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>🔒 Security Headers</h3>
+          <p>
+            Helmet configuration for comprehensive security headers and CSP
+            policies.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>🧹 Request Sanitization</h3>
+          <p>
+            XSS protection and input sanitization to prevent malicious content.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>✅ Input Validation</h3>
+          <p>
+            Express-validator integration with common validation rules and
+            patterns.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>🔑 API Security</h3>
+          <p>API key validation, admin authentication, and access control.</p>
+        </div>
+        <div class="feature-card">
+          <h3>📁 File Upload Security</h3>
+          <p>
+            Secure file upload validation with type, size, and extension checks.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>🌍 Environment Validation</h3>
+          <p>Zod-based environment variable validation with type safety.</p>
+        </div>
+      </div>
+
+      <h2>📖 Installation</h2>
+      <pre><code>npm install @alloylab/security
+# or
+yarn add @alloylab/security
+# or
+pnpm add @alloylab/security</code></pre>
+
+      <h2>🔧 Configuration</h2>
+      <p>Set up your environment variables:</p>
+      <pre><code># Required
+NODE_ENV=development|production|test
+DATABASE_URI=your_database_uri
+PAYLOAD_SECRET=your_32_character_secret
+PAYLOAD_PUBLIC_SERVER_URL=https://your-api.com
+PAYLOAD_PUBLIC_CMS_URL=https://your-cms.com
+
+# Optional Security
+API_KEY=your_api_key
+ADMIN_TOKEN=your_admin_token
+ALLOWED_ORIGIN_1=https://yourdomain.com
+ALLOWED_ORIGIN_2=https://anotherdomain.com</code></pre>
+
+      <h2>🛠️ Usage Examples</h2>
+
+      <h3>Basic Security Middleware</h3>
+      <pre><code>import { createApiSecurity } from '@alloylab/security';
+
+app.use(createApiSecurity(['https://yourdomain.com']));</code></pre>
+
+      <h3>API Key Validation</h3>
+      <pre><code>import { createValidateApiKey } from '@alloylab/security';
+
+app.use('/api', createValidateApiKey());</code></pre>
+
+      <h3>Admin Authentication</h3>
+      <pre><code>import { createRequireAdmin } from '@alloylab/security';
+
+app.use('/admin', createRequireAdmin());</code></pre>
+
+      <h3>File Upload Security</h3>
+      <pre><code>import { createValidateFileUpload } from '@alloylab/security';
+
+app.post('/upload',
+  upload.single('file'),
+  createValidateFileUpload(5 * 1024 * 1024, ['image/jpeg', 'image/png'])
+);</code></pre>
+
+      <h2>🔒 Security Best Practices</h2>
+      <div class="warning">
+        <strong>⚠️ Important:</strong> Always validate environment variables on
+        startup and use HTTPS in production.
+      </div>
+
+      <ul>
+        <li>✅ Validate environment variables on startup</li>
+        <li>✅ Use appropriate rate limits for different endpoint types</li>
+        <li>✅ Only allow necessary CORS origins</li>
+        <li>✅ Sanitize all user inputs</li>
+        <li>✅ Validate file uploads for type, size, and content</li>
+        <li>✅ Use strong, unique API keys and admin tokens</li>
+        <li>✅ Implement comprehensive security logging</li>
+        <li>✅ Always include security headers</li>
+      </ul>
+
+      <h2>📚 Documentation</h2>
+      <p>
+        For detailed documentation, visit our
+        <a
+          href="https://github.com/alloy-lab/overland/tree/main/packages/security#readme"
+          >GitHub repository</a
+        >.
+      </p>
+
+      <h2>🤝 Contributing</h2>
+      <p>
+        Contributions are welcome! Please read our
+        <a
+          href="https://github.com/alloy-lab/overland/blob/main/CONTRIBUTING.md"
+          >Contributing Guide</a
+        >
+        for details.
+      </p>
+
+      <h2>📄 License</h2>
+      <p>
+        This project is licensed under the MIT License - see the
+        <a href="https://github.com/alloy-lab/overland/blob/main/LICENSE"
+          >LICENSE</a
+        >
+        file for details.
+      </p>
+
+      <h2>🆘 Support</h2>
+      <ul>
+        <li>
+          📖
+          <a
+            href="https://github.com/alloy-lab/overland/tree/main/packages/security#readme"
+            >Documentation</a
+          >
+        </li>
+        <li>
+          🐛
+          <a href="https://github.com/alloy-lab/overland/issues"
+            >Issue Tracker</a
+          >
+        </li>
+        <li>
+          💬
+          <a href="https://github.com/alloy-lab/overland/discussions"
+            >Discussions</a
+          >
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
