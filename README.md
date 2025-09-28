@@ -8,15 +8,17 @@ Security utilities and middleware for modern web applications. This package prov
 ## Features
 
 - 🛡️ **CORS Configuration**: Flexible CORS setup with origin validation
-- ⏱️ **Rate Limiting**: Configurable rate limiting for different endpoints
-- 🔒 **Security Headers**: Helmet configuration for security headers
+- ⏱️ **Rate Limiting**: Configurable rate limiting for different endpoint types (general, auth, password reset)
+- 🔒 **Security Headers**: Helmet configuration for comprehensive security headers
 - 🧹 **Request Sanitization**: XSS protection and input sanitization
-- ✅ **Validation**: Express-validator integration with common validation rules
-- 🔑 **API Security**: API key validation and admin authentication
-- 📁 **File Upload Security**: Secure file upload validation
-- 🌍 **Environment Validation**: Zod-based environment variable validation
+- ✅ **Validation**: Express-validator integration with common and API-specific validation rules
+- 🔑 **API Security**: API key validation, admin authentication, and request logging
+- 📁 **File Upload Security**: Secure file upload validation with type, size, and extension checks
+- 🌍 **Environment Validation**: Zod-based environment variable validation with type safety
+- 📊 **Request Logging**: Comprehensive API request and response logging with timing
 - 🔧 **TypeScript Support**: Full TypeScript definitions and type safety
 - 📦 **Framework Agnostic**: Works with any Express-based application
+- 🎯 **Specialized Middleware**: Pre-configured security middleware for different use cases
 
 ## Installation
 
@@ -103,7 +105,7 @@ app.post(
   upload.single('file'),
   createValidateFileUpload(
     5 * 1024 * 1024, // 5MB max size
-    ['image/jpeg', 'image/png', 'image/gif'] // Allowed types
+    ['image/jpeg', 'image/png', 'image/gif', 'image/webp'] // Allowed types
   ),
   (req, res) => {
     res.json({ message: 'File uploaded successfully' });
@@ -173,6 +175,26 @@ import { createPasswordResetSecurity } from '@alloylab/security';
 app.use('/auth/reset', createPasswordResetSecurity());
 ```
 
+#### `createFormSecurity(allowedOrigins?, logger?)`
+
+Creates security middleware for form submissions with general rate limiting.
+
+```typescript
+import { createFormSecurity } from '@alloylab/security';
+
+app.use('/forms', createFormSecurity());
+```
+
+#### `createStaticSecurity()`
+
+Creates security middleware for static file serving with cache headers.
+
+```typescript
+import { createStaticSecurity } from '@alloylab/security';
+
+app.use('/static', createStaticSecurity());
+```
+
 ### API Security
 
 #### `createValidateApiKey(logger?)`
@@ -209,6 +231,31 @@ app.post(
 );
 ```
 
+#### `createApiRequestLogger(logger?)`
+
+Logs API requests and responses with timing information.
+
+```typescript
+import { createApiRequestLogger } from '@alloylab/security';
+
+app.use('/api', createApiRequestLogger());
+```
+
+#### `createValidateApiRequest(logger?)`
+
+Validates API requests using express-validator results.
+
+```typescript
+import { createValidateApiRequest } from '@alloylab/security';
+
+app.post(
+  '/api/data',
+  validationRules.email,
+  createValidateApiRequest(),
+  handler
+);
+```
+
 ### Validation Rules
 
 The package includes pre-configured validation rules:
@@ -232,13 +279,79 @@ app.post(
 Available validation rules:
 
 - `email` - Email validation with normalization
-- `password` - Strong password requirements
-- `name` - Name validation with character restrictions
-- `slug` - URL-friendly slug validation
-- `content` - Content length validation
-- `title` - Title length validation
-- `page` - Pagination page validation
-- `limit` - Pagination limit validation
+- `password` - Strong password requirements (8+ chars, uppercase, lowercase, number)
+- `name` - Name validation with character restrictions (letters, spaces, hyphens, apostrophes, periods)
+- `slug` - URL-friendly slug validation (lowercase letters, numbers, hyphens)
+- `content` - Content length validation (1-10,000 characters)
+- `title` - Title length validation (1-200 characters)
+- `page` - Pagination page validation (positive integer)
+- `limit` - Pagination limit validation (1-100)
+
+### API Validation Rules
+
+The package also includes specialized API validation rules:
+
+```typescript
+import { apiValidationRules } from '@alloylab/security';
+
+// Page creation/update validation
+app.post(
+  '/api/pages',
+  apiValidationRules.createPage,
+  createValidateApiRequest(),
+  handler
+);
+
+// Page update validation
+app.put(
+  '/api/pages/:id',
+  apiValidationRules.updatePage,
+  createValidateApiRequest(),
+  handler
+);
+
+// Media upload validation
+app.post(
+  '/api/media',
+  apiValidationRules.uploadMedia,
+  createValidateApiRequest(),
+  handler
+);
+
+// Site settings validation
+app.put(
+  '/api/settings',
+  apiValidationRules.updateSiteSettings,
+  createValidateApiRequest(),
+  handler
+);
+
+// Pagination validation
+app.get(
+  '/api/data',
+  apiValidationRules.pagination,
+  createValidateApiRequest(),
+  handler
+);
+
+// Search validation
+app.get(
+  '/api/search',
+  apiValidationRules.search,
+  createValidateApiRequest(),
+  handler
+);
+```
+
+Available API validation rule sets:
+
+- `createPage` - Page creation validation (title, content, slug, status)
+- `updatePage` - Page update validation (ID, optional title/content/status)
+- `deletePage` - Page deletion validation (MongoDB ObjectId)
+- `uploadMedia` - Media upload validation (alt text, caption)
+- `updateSiteSettings` - Site settings validation (title, description, contact email)
+- `pagination` - Pagination validation (page, limit, sort)
+- `search` - Search validation (query, type)
 
 ### Request Sanitization
 
@@ -262,6 +375,60 @@ Formats API responses with consistent structure and security headers.
 import { createFormatApiResponse } from '@alloylab/security';
 
 app.use(createFormatApiResponse(true));
+```
+
+### Additional Utilities
+
+#### `createRequestSizeLimit(limit)`
+
+Creates middleware to limit request body size.
+
+```typescript
+import { createRequestSizeLimit } from '@alloylab/security';
+
+app.use(createRequestSizeLimit('10MB'));
+```
+
+#### `createCorsConfig(allowedOrigins?, logger?)`
+
+Creates CORS configuration object.
+
+```typescript
+import { createCorsConfig } from '@alloylab/security';
+
+const corsConfig = createCorsConfig(['https://yourdomain.com']);
+```
+
+#### `createRateLimitConfig()`
+
+Creates rate limiting configuration with different limits for different endpoint types.
+
+```typescript
+import { createRateLimitConfig } from '@alloylab/security';
+
+const rateLimitConfig = createRateLimitConfig();
+// Returns: { general, auth, passwordReset }
+```
+
+#### `createHelmetConfig()`
+
+Creates Helmet security headers configuration.
+
+```typescript
+import { createHelmetConfig } from '@alloylab/security';
+
+const helmetConfig = createHelmetConfig();
+```
+
+#### `createApiRateLimit(windowMs, max, message)`
+
+⚠️ **Note**: This function is currently a placeholder implementation and requires Redis integration for production use.
+
+```typescript
+import { createApiRateLimit } from '@alloylab/security';
+
+// Currently returns a no-op middleware
+const rateLimit = createApiRateLimit(60000, 100, 'Too many requests');
 ```
 
 ## Configuration
@@ -289,8 +456,11 @@ ADMIN_IP_WHITELIST=192.168.1.0/24
 ENABLE_RATE_LIMITING=true
 ENABLE_CORS=true
 LOG_LEVEL=info
+SENTRY_DSN=https://your-sentry-dsn
+
+# File uploads
 MAX_FILE_SIZE=10MB
-ALLOWED_FILE_TYPES=image/jpeg,image/png,image/gif
+ALLOWED_FILE_TYPES=image/jpeg,image/png,image/gif,image/webp
 ```
 
 ### Custom Logger
